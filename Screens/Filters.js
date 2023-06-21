@@ -8,6 +8,7 @@ const Filters = ({ onChange, selections, sections }) => {
         <TouchableOpacity
           onPress={() => {
             onChange(index);
+           
           }}
           style={{
             flex: 1,

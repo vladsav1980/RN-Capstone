@@ -1,20 +1,20 @@
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('little_lemon');
-
 export async function createTable() {
-  return new Promise((resolve, reject) => {
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          'create table if not exists menuitems (id text primary key not null, name text, description text, price text, category text, image text);'
-        );
-      },
-      reject,
-      resolve
-    );
-  });
-}
+    return new Promise((resolve, reject) => {
+      db.transaction(
+        (tx) => {
+          tx.executeSql(
+            'create table if not exists menuitems (id INTEGER PRIMARY KEY AUTOINCREMENT,name text , description text, price text, category text, image text);'
+          );
+        },
+        reject,
+        resolve
+      );
+    });
+  }
+
 
 export async function getMenuItems() {
   return new Promise((resolve) => {
@@ -26,20 +26,38 @@ export async function getMenuItems() {
   });
 }
 
+
+
 export function saveMenuItems(menuItems) {
   db.transaction((tx) => {
+    const placeholders = menuItems.map(() => '(?, ?, ?, ?, ?)').join(', ');
+    const values = menuItems.flatMap((item) => [
+      item.name,
+      item.price,
+      item.description,
+      item.category,
+      item.image
+    ]);
+
+    const query = `INSERT INTO menuitems (name, price, description, category, image) VALUES ${placeholders}`;
+
     tx.executeSql(
-      `insert into menuitems (id, name, price, description, category, image) values ${menuItems
-        .map(
-          (item) =>
-            `('${item.name}', '${item.name}', '${item.price}', '${item.description}', '${item.category}', '${item.image}')`
-        )
-        .join(', ')}`
+      query,
+      values,
+      (_, { rowsAffected }) => {
+        console.log(`Inserted ${rowsAffected} menu items`);
+      },
+      (_, error) => {
+        console.log(`Error inserting menu items: ${error.message}`);
+      }
     );
   });
 }
 
+  
+
 export async function filterByQueryAndCategories(query, activeCategories) {
+
   return new Promise((resolve, reject) => {
     const columns = ['name', 'price', 'description', 'image'];
 const columnString = columns.join(', ');
@@ -47,7 +65,7 @@ const columnString = columns.join(', ');
       db.transaction((tx) => {
         
         tx.executeSql(
-          `select ${columnString} from menuitems where ${activeCategories
+          `select * from menuitems where ${activeCategories
             .map((category) => `category='${category}'`)
             .join(' or ')}`,
           [],
@@ -59,7 +77,7 @@ const columnString = columns.join(', ');
     } else {
       db.transaction((tx) => {
         tx.executeSql(
-          `select ${columnString} from menuitems where (name like '%${query}%') and (${activeCategories
+          `select * from menuitems where (name like '%${query}%') and (${activeCategories
             .map((category) => `category='${category}'`)
             .join(' or ')})`,
           [],
@@ -69,5 +87,7 @@ const columnString = columns.join(', ');
         );
       }, reject);
     }
-  });
+  },
+  );
+ 
 }

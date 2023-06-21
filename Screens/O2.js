@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect,useState} from 'react';
 import {View,Text,TextInput,Image,StyleSheet,Button,Pressable,KeyboardAvoidingView} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,7 +21,7 @@ export default function Onboardingr({navigation}){
     const [nl, setnl] = useState(false);
     const [i, seti] = useState(null);
     var check=true;
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchstuff = ()=>{
                 onChangeFirstName('')
                 onChangeMail('')
@@ -29,6 +29,20 @@ export default function Onboardingr({navigation}){
     
         fetchstuff();
       }, []);
+      useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+          // Perform any necessary actions when the screen is focused
+          console.log('Onboard screen is focused number 2');
+          // Refresh data or update the screen content here
+          onChangeFirstName('')
+                onChangeMail('')
+          // Update the refresh key to trigger a re-render
+          
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
+
     const updation=async()=>{
         try{
             const jsonValue=JSON.stringify(log)

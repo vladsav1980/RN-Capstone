@@ -61,18 +61,20 @@ export default function Home({navigation}){
             await createTable();
             // 2. Check if data was already stored
             let menuItems = await getMenuItems();
-    
+            
             if (!menuItems.length) {
               // Fetching menu from URL
               const response = await fetch(API_URL);
               const json = await response.json();
               menuItems = json.menu
               // Storing into database
+             
               saveMenuItems(menuItems);
             }
     
-            
+          
             setData(menuItems);
+           
           } catch (e) {
             // Handle error
             Alert.alert(e.message);
@@ -89,12 +91,13 @@ export default function Home({navigation}){
             return filterSelections[i];
           });
           try {
-            const menuItems = await filterByQueryAndCategories(
+            const menuItemss = await filterByQueryAndCategories(
               query,
               activeCategories
             );
-           
-            setData(menuItems);
+         
+            setData(menuItemss);
+         
           } catch (e) {
             Alert.alert(e.message);
           }

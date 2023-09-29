@@ -6,7 +6,6 @@ const InitialsAvatar = ({ initials,  size,
     backgroundColor,
     textColor }) => {
   const circleSize = size;
-  
 
   return (
     <Svg width={circleSize} height={circleSize}>

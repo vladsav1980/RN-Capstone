@@ -16,9 +16,6 @@ export default function Profiler({ navigation }){
           aspect: [4, 3],
           quality: 1,
         });
-    
-      
-    
         if (!result.canceled) {
            setImage(result.assets[0].uri);
         }else {

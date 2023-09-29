@@ -16,7 +16,6 @@ const styles=StyleSheet.create({
     marginTop:100,
     flex:1,
      
-     
         resizeMode:"contain",
         borderColor:"green",
     },

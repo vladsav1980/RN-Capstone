@@ -15,7 +15,6 @@ const Filters = ({ onChange, selections, sections }) => {
             justifyContent: 'center',
             alignItems: 'center',
             padding: 18,
-         
             backgroundColor: selections[index] ? '#EE9972' : 'silver',
             borderWidth: 1,
             borderRadius:30,

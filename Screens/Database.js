@@ -54,7 +54,6 @@ export function saveMenuItems(menuItems) {
   });
 }
 
-  
 
 export async function filterByQueryAndCategories(query, activeCategories) {
 
